@@ -24,16 +24,20 @@
 
 论文使用LSTM模型对HBV模型的一些参数（包括静态参数和动态参数）进行预测，动态参数其一是替换了蒸发计算公式中的$\gamma$参数，以适应在不同季节中植被对蒸发的作用，其二是替换了产流计算中的$\beta$参数，反映土壤含水的有效产流量关系，并通过动态变化反映历史观测对产流的影响；静态参数$\theta$则是反映流域模型的参数空间差异性。同时论文使用神经网络替换了地面产流计算公式，通过训练更好的反映两者的关系，相比原来的固定的计算公式，或可能得到更高的预测性能。
 
-![img](picture/paper3_f1.png)
+![img](picture/paper3_f1.png "论文框架图") 
 
 论文首先对比了dPL+HBV with one ($\delta_1()$) and mulitiple componets ($\delta_n()$)，同时还对比了加入动态参数$\beta$($\delta_n(\beta^t)$)以及神经网络NN替换产流计算公式的 $\delta_n(NN_r)$这几个模型在CAMELS数据集上的预测性能，同时采用特殊的损失函数平衡峰值和谷值的误差。训练结果表明模型$\delta_n$的预测精度与LSTM接近，同时中间状态与验证数据BFI和ET有着较高的相关性，反映了模型既能够贴近LSTM的预测精度，其中间状态也能够反映一些物理变量。增加多个并行计算单元(mulitiple componets)可以显著提升模型精度，而加入动态参数则能够进一步提升模型精度，剖析参数优化结果可以发现其存在季节性变化。
 
 [4] [Improving AI System Awareness of Geoscience Knowledge: Symbiotic Integration of Physical Approaches and Deep Learning, GRL, 2020](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020GL088229)[⭐⭐⭐⭐⭐]
 
 论文提出了一个物理过程耦合的循环神经网络模型P-RNN，将EXP-HYDRO模型的水循环计算过程作为RNN模型的计算过程，将RNN模型初始状态类比水文模型的初始状态($S_0$和$S_1$)，然后仿照RNN模型的计算思路，通过输入各个时段下的气象观测数据和通过额外神经层预测的水文模型参数(通过地区特征预测水文模型参数)，获取各个时段的中间状态，也即是土壤状态，然后再将各时段的土壤状态导出，再使用EXP-HYDRO水文模型的产流计算公式得到径流过程的计算结果。
+
 ![img](picture/paper4_f1.png "论文框架图")
+
 ![img](picture/paper4_f2.png "P-RNN结构图")
+
 ![img](picture/paper4_f3.png "hybrid模型结构图")
+
 注：我在阅读源码中并没有发现$\theta_N$传入Conv1D层的计算过程。
 
 论文首先是对比了各个模型(hybrid, CNN1D, PRNN, LSTM)在CAMELS的性能，结果是表明在各个流域下hybrid的模型精度最优，且洪峰预测能力更强，但是若是LSTM+CNN1D呢？
@@ -44,7 +48,7 @@
 
 关于模型可解释性的研究，论文将模型的中间状态$S_0$与另一个数据集的daily snow water equivalent数据进行相关性分析，结果表明之间较高的相关性
 
-[5] [Improving hydrologic models for predictions and process understanding using neural ODEs, HESS, 2022](https://hess.copernicus.org/articles/26/5085/2022/)
+[5] [Improving hydrologic models for predictions and process understanding using neural ODEs, HESS, 2022](https://hess.copernicus.org/articles/26/5085/2022/)[⭐⭐⭐⭐⭐]
 
 当前深度学习应用于水文预报上存在的问题: 可解释性, 固定预测步长, 先验知识
 
